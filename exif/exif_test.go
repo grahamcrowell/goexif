@@ -237,3 +237,28 @@ func TestZeroLengthTagError(t *testing.T) {
 		t.Fatal("wrong error:", err.Error())
 	}
 }
+
+func TestRating(t *testing.T) {
+	name := filepath.Join(*dataDir, "samples/has_rating.JPG")
+	f, err := os.Open(name)
+	if err != nil {
+		t.Fatalf("%v\n", err)
+	}
+	defer f.Close()
+
+	x, err := Decode(f)
+	if err != nil {
+		t.Fatal("failed to decode has_rating")
+	}
+	tag, err := x.Get(Rating)
+	if err != nil {
+		t.Fatal("failed to get Rating")
+	}
+	rating, err := tag.Int(0)
+	if err != nil {
+		t.Fatal("failed to get Int from rating")
+	}
+	if rating != 2 {
+		t.Fatal("expected rating was 2")
+	}
+}
